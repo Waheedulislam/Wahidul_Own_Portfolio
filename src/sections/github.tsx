@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Github, Star, GitFork, ExternalLink, Pin } from "lucide-react";
+import { Github, Star, GitFork, ExternalLink, Pin, FolderGit2, Users, UserPlus } from "lucide-react";
 import { siteConfig } from "@/data/site";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { ContributionGraph } from "@/components/contribution-graph";
 import type { ContributionData, GithubStats, PinnedRepo } from "@/types";
 
 type Status = "loading" | "ready" | "error";
+type ContributionPeriod = number | "last";
 
 const LANG_COLORS: Record<string, string> = {
   JavaScript: "#F1E05A",
@@ -30,10 +31,17 @@ const SKELETON =
 export function GithubSection() {
   const [stats, setStats] = React.useState<GithubStats | null>(null);
   const [contrib, setContrib] = React.useState<ContributionData | null>(null);
+  const [contribPeriod, setContribPeriod] = React.useState<ContributionPeriod | null>(null);
   const [pinned, setPinned] = React.useState<PinnedRepo[]>([]);
   const [status, setStatus] = React.useState<Status>("loading");
   const [contribStatus, setContribStatus] = React.useState<Status>("loading");
   const [pinnedStatus, setPinnedStatus] = React.useState<Status>("loading");
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = React.useState<number | null>(null);
+  const years = React.useMemo(
+    () => Array.from({ length: 5 }, (_, index) => currentYear - index),
+    [currentYear],
+  );
 
   React.useEffect(() => {
     let cancelled = false;
@@ -72,15 +80,6 @@ export function GithubSection() {
       () => setStatus("error"),
     );
 
-    loadWithRetry<ContributionData>(
-      "/api/contributions",
-      (data) => {
-        setContrib(data);
-        setContribStatus("ready");
-      },
-      () => setContribStatus("error"),
-    );
-
     loadWithRetry<{ repos: PinnedRepo[] }>(
       "/api/pinned-repos",
       (data) => {
@@ -95,8 +94,38 @@ export function GithubSection() {
     };
   }, []);
 
+  React.useEffect(() => {
+    let cancelled = false;
+    setContribStatus("loading");
+    const period: ContributionPeriod = selectedYear ?? "last";
+
+    async function loadContributions(attempt = 1): Promise<void> {
+      try {
+        const res = await fetch(`/api/contributions?year=${period}`);
+        if (!res.ok) throw new Error("request failed");
+        const data = (await res.json()) as ContributionData;
+        if (cancelled) return;
+        setContrib(data);
+        setContribPeriod(period);
+        setContribStatus("ready");
+      } catch {
+        if (cancelled) return;
+        if (attempt < 2) {
+          window.setTimeout(() => void loadContributions(attempt + 1), 1200);
+        } else {
+          setContribStatus("error");
+        }
+      }
+    }
+
+    void loadContributions();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedYear]);
+
   return (
-    <section id="github" className="border-b border-border py-28 lg:py-32">
+    <section id="github" className="section-y border-b border-border">
       <div className="container-px">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-[640px]">
@@ -120,45 +149,90 @@ export function GithubSection() {
           </a>
         </div>
 
+        <div className="mb-6 grid gap-4 sm:grid-cols-3">
+          {[
+            { label: "Public repositories", value: stats?.publicRepos, icon: FolderGit2, accent: "text-accent" },
+            { label: "Followers", value: stats?.followers, icon: Users, accent: "text-teal" },
+            { label: "Following", value: stats?.following, icon: UserPlus, accent: "text-accent" },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <div key={item.label} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card transition-[transform,border-color,box-shadow] duration-200 ease-smooth hover:-translate-y-1 hover:border-accent/45 hover:shadow-glow">
+                <span aria-hidden="true" className="absolute -right-5 -top-5 h-20 w-20 rounded-full bg-accent/[0.09] blur-2xl" />
+                <div className="relative flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-faint">{item.label}</p>
+                    <strong className="mt-2 block font-display text-[32px] font-semibold leading-none tracking-[-0.03em]">
+                      {status === "loading" ? "—" : item.value ?? "—"}
+                    </strong>
+                  </div>
+                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl bg-foreground/[0.045] ${item.accent}`}>
+                    <Icon size={18} />
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {status === "error" ? (
           <p className="rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
             GitHub data couldn&apos;t be loaded right now. Visit the profile
             directly using the button above.
           </p>
         ) : (
-          <Card className="p-6 sm:p-8">
-            <div className="mb-[26px] flex flex-wrap gap-9">
-              {[
-                { label: "Public Repos", value: stats?.publicRepos },
-                { label: "Followers", value: stats?.followers },
-                { label: "Following", value: stats?.following },
-              ].map((s) => (
-                <div key={s.label}>
-                  <strong className="text-gradient block font-display text-[28px] font-semibold">
-                    {status === "loading" ? "—" : s.value}
-                  </strong>
-                  <span className="font-mono text-xs text-faint">
-                    {s.label}
-                  </span>
+          <Card className="p-5 sm:p-8">
+            <div className="rounded-xl border border-border bg-foreground/[0.015] p-5 sm:p-[26px]">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_92px] lg:gap-8">
+                <div>
+                  <div className="mb-5">
+                    <p className="text-sm font-semibold">
+                      {selectedYear ? `Contribution activity — ${selectedYear}` : "Contribution activity"}
+                    </p>
+                    <p className="mt-0.5 text-xs text-faint">
+                      {selectedYear ? "Full January–December calendar." : "Your public contribution activity from the last 12 months."}
+                    </p>
+                  </div>
+                  <div className="relative min-h-[142px]">
+                    {!contrib && contribStatus === "loading" && (
+                      <div className={`h-[100px] ${SKELETON}`} />
+                    )}
+                    {contribStatus === "error" && !contrib && (
+                      <p className="text-sm text-muted-foreground">
+                        Contribution data couldn&apos;t be loaded right now.
+                      </p>
+                    )}
+                    {contrib && contribPeriod && (
+                      <ContributionGraph days={contrib.contributions} period={contribPeriod} />
+                    )}
+                    {contribStatus === "loading" && contrib && (
+                      <p className="absolute right-0 top-0 rounded-full bg-card/90 px-2 py-1 font-mono text-[10px] text-faint">
+                        Loading {selectedYear ?? "last 12 months"}…
+                      </p>
+                    )}
+                    {contribStatus === "error" && contrib && (
+                      <p className="mt-3 text-xs text-muted-foreground">Couldn&apos;t update this year. Showing the last loaded chart.</p>
+                    )}
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            <div className="min-h-[172px] overflow-x-auto rounded-xl border border-border bg-foreground/[0.015] p-[26px]">
-              <p className="mb-5 text-sm font-semibold">
-                Contribution activity
-              </p>
-              {contribStatus === "loading" && (
-                <div className={`h-[100px] ${SKELETON}`} />
-              )}
-              {contribStatus === "error" && (
-                <p className="text-sm text-muted-foreground">
-                  Contribution data couldn&apos;t be loaded right now.
-                </p>
-              )}
-              {contribStatus === "ready" && contrib && (
-                <ContributionGraph days={contrib.contributions} />
-              )}
+                <nav aria-label="Contribution year filter" className="flex gap-2 overflow-x-auto border-t border-border pt-4 lg:flex-col lg:overflow-visible lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
+                  {years.map((year) => {
+                    const isActive = selectedYear === year || (selectedYear === null && year === currentYear);
+                    return (
+                      <button
+                        key={year}
+                        type="button"
+                        onClick={() => setSelectedYear(selectedYear === year && year === currentYear ? null : year)}
+                        className={`min-w-[64px] rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${isActive ? "bg-accent text-accent-foreground shadow-glow" : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"}`}
+                        aria-pressed={isActive}
+                        title={year === currentYear ? "Click again to return to the last 12 months" : `Show ${year} contributions`}
+                      >
+                        {year}
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
             </div>
 
             <div className="mt-7">

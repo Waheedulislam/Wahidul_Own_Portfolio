@@ -7,12 +7,19 @@ import { siteConfig } from "@/data/site";
 // See: https://github.com/grubersjoe/github-contributions-api
 export const revalidate = 3600;
 
-export async function GET() {
+export async function GET(request: Request) {
   const username = siteConfig.github.username;
+  const requestedYear = new URL(request.url).searchParams.get("year");
+  const currentYear = new Date().getFullYear();
+  const year = requestedYear === "last"
+    ? "last"
+    : requestedYear && /^\d{4}$/.test(requestedYear) && Number(requestedYear) >= 2008 && Number(requestedYear) <= currentYear
+      ? requestedYear
+      : "last";
 
   try {
     const res = await fetch(
-      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+      `https://github-contributions-api.jogruber.de/v4/${username}?y=${year}`,
       { next: { revalidate } }
     );
 

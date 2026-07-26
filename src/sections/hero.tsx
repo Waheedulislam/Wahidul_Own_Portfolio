@@ -35,7 +35,10 @@ export function Hero() {
 
   return (
     <section id="home" className="border-b border-border">
-      <div className="container-px grid items-start gap-14 py-24 lg:grid-cols-[1.1fr_0.9fr] lg:py-28">
+      {/* Top padding stays tighter than `.section-y` — the hero sits right under
+          the navbar, so pushing it further down just wastes the first screen.
+          The bottom matches the shared rhythm. */}
+      <div className="container-px grid items-start gap-14 pb-32 pt-24 sm:pb-36 lg:grid-cols-[1.1fr_0.9fr] lg:pb-44 lg:pt-28">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

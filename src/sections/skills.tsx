@@ -8,7 +8,7 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="border-b border-border bg-background-alt py-28 lg:py-32"
+      className="section-y border-b border-border bg-background-alt"
     >
       <div className="container-px">
         <div className="mb-12 max-w-[640px]">

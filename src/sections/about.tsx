@@ -17,7 +17,7 @@ const infoCards = [
 
 export function About() {
   return (
-    <section id="about" className="border-b border-border py-28 lg:py-32">
+    <section id="about" className="section-y border-b border-border">
       <div className="container-px grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14">
         <motion.div
           initial={{ opacity: 0, x: -16 }}

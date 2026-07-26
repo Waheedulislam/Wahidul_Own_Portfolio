@@ -95,7 +95,7 @@ export function Projects() {
   const visible = filter === "All" ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <section id="projects" className="border-b border-border py-28 lg:py-32">
+    <section id="projects" className="section-y border-b border-border">
       <div className="container-px">
         <div className="mb-12 max-w-[640px]">
           <div className="section-eyebrow">Featured Work</div>

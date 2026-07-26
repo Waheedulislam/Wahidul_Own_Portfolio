@@ -18,7 +18,6 @@ const TYPE_DELAY = 700;
 const HOLD = 550;
 
 const EASE_SMOOTH = [0.22, 0.61, 0.36, 1] as const;
-const EASE_REVEAL = [0.76, 0, 0.24, 1] as const;
 
 const SOCIALS = [
   { href: siteConfig.links.github, label: "GitHub", icon: Github },
@@ -131,9 +130,9 @@ export function Preloader() {
       {visible && (
         <motion.div
           id="preloader"
-          // Slides away like a curtain to reveal the site underneath
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.75, ease: EASE_REVEAL }}
+          // Keep the loader anchored in the centre and dissolve it in place.
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: EASE_SMOOTH }}
           className="fixed inset-0 z-[300] flex items-center justify-center overflow-hidden bg-background px-6"
         >
           <div className="bg-grid absolute inset-0 animate-grid-drift" aria-hidden="true" />
@@ -144,8 +143,8 @@ export function Preloader() {
           />
 
           <motion.div
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.35, ease: EASE_SMOOTH }}
+            exit={{ opacity: 0, scale: 0.985 }}
+            transition={{ duration: 0.65, ease: EASE_SMOOTH }}
             className="relative w-full max-w-[560px]"
           >
             {/* Technical corner frame */}

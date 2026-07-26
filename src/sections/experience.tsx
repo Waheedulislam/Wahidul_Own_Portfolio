@@ -6,7 +6,7 @@ import { timeline } from "@/data/timeline";
 
 export function Experience() {
   return (
-    <section id="experience" className="border-b border-border py-28 lg:py-32">
+    <section id="experience" className="section-y border-b border-border">
       <div className="container-px">
         <div className="mb-12 max-w-[640px]">
           <div className="section-eyebrow">Experience</div>

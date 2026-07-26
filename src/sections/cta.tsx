@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 export function Cta() {
   return (
-    <section className="border-b border-border py-28 lg:py-32">
+    <section className="section-y border-b border-border">
       <div className="container-px">
         <motion.div
           initial={{ opacity: 0, y: 14 }}

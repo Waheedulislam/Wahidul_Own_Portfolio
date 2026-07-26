@@ -99,6 +99,13 @@
     @apply mx-auto w-full max-w-[1140px] px-6;
   }
 
+  /* Vertical rhythm between sections. Kept in one place so every section stays
+     in step — change it here and the whole page follows. Deliberately generous:
+     adjacent sections should read as separate blocks, not run together. */
+  .section-y {
+    @apply py-32 sm:py-36 lg:py-44;
+  }
+
   /* Eyebrow with the leading rule from the reference design */
   .section-eyebrow {
     @apply mb-3.5 flex items-center gap-2.5 font-mono text-[12.5px] font-medium uppercase tracking-[0.06em] text-accent;
