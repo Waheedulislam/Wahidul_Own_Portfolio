@@ -1,0 +1,16 @@
+{
+  "name": "Waheedul Islam — Portfolio",
+  "short_name": "Waheedul Islam",
+  "description": "Frontend, Backend and Full Stack Developer based in Dhaka, Bangladesh.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0C0820",
+  "theme_color": "#0C0820",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
