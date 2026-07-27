@@ -97,9 +97,9 @@ export function ContributionGraph({ days, period }: { days: ContributionDay[]; p
     : `${total.toLocaleString()} contributions in ${period} · full year`;
 
   return (
-    <div>
-      <p className="mb-3 font-display text-[15px] font-semibold">{summary}</p>
-      <div className="overflow-x-auto pb-1">
+    <div className="min-w-0">
+      <p className="mb-3 max-w-[24ch] font-display text-[14px] font-semibold sm:max-w-none sm:text-[15px]">{summary}</p>
+      <div className="-mx-1 overflow-x-auto overscroll-x-contain px-1 pb-1 [scrollbar-width:thin]">
         <div className="min-w-max">
           <div className="mb-1.5 flex gap-[3px] pl-[29px] font-mono text-[11px] text-faint">
             {weeks.map((_, index) => {

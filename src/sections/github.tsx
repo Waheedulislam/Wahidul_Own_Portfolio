@@ -127,10 +127,10 @@ export function GithubSection() {
   return (
     <section id="github" className="section-y border-b border-border">
       <div className="container-px">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4 sm:mb-12">
           <div className="max-w-[640px]">
             <div className="section-eyebrow">GitHub</div>
-            <h2 className="font-display text-[29px] font-semibold tracking-[-0.01em]">
+            <h2 className="font-display text-[25px] font-semibold tracking-[-0.01em] sm:text-[29px]">
               Live from GitHub
             </h2>
             <p className="mt-3.5 max-w-[56ch] text-muted-foreground">
@@ -141,15 +141,16 @@ export function GithubSection() {
             href={siteConfig.links.github}
             target="_blank"
             rel="noopener noreferrer"
+            className="w-full sm:w-auto"
           >
-            <Button variant="outline">
+            <Button variant="outline" className="w-full sm:w-auto">
               <Github size={15} />
               View Profile
             </Button>
           </a>
         </div>
 
-        <div className="mb-6 grid gap-4 sm:grid-cols-3">
+        <div className="mb-6 grid gap-3 sm:grid-cols-3 sm:gap-4">
           {[
             { label: "Public repositories", value: stats?.publicRepos, icon: FolderGit2, accent: "text-accent" },
             { label: "Followers", value: stats?.followers, icon: Users, accent: "text-teal" },
@@ -157,16 +158,16 @@ export function GithubSection() {
           ].map((item) => {
             const Icon = item.icon;
             return (
-              <div key={item.label} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card transition-[transform,border-color,box-shadow] duration-200 ease-smooth hover:-translate-y-1 hover:border-accent/45 hover:shadow-glow">
+              <div key={item.label} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-card transition-[transform,border-color,box-shadow] duration-200 ease-smooth hover:-translate-y-1 hover:border-accent/45 hover:shadow-glow sm:p-5">
                 <span aria-hidden="true" className="absolute -right-5 -top-5 h-20 w-20 rounded-full bg-accent/[0.09] blur-2xl" />
                 <div className="relative flex items-start justify-between gap-3">
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-faint">{item.label}</p>
-                    <strong className="mt-2 block font-display text-[32px] font-semibold leading-none tracking-[-0.03em]">
+                    <strong className="mt-2 block font-display text-[28px] font-semibold leading-none tracking-[-0.03em] sm:text-[32px]">
                       {status === "loading" ? "—" : item.value ?? "—"}
                     </strong>
                   </div>
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl bg-foreground/[0.045] ${item.accent}`}>
+                  <span className={`flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-foreground/[0.045] sm:h-10 sm:w-10 ${item.accent}`}>
                     <Icon size={18} />
                   </span>
                 </div>
@@ -181,10 +182,10 @@ export function GithubSection() {
             directly using the button above.
           </p>
         ) : (
-          <Card className="p-5 sm:p-8">
-            <div className="rounded-xl border border-border bg-foreground/[0.015] p-5 sm:p-[26px]">
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_92px] lg:gap-8">
-                <div>
+          <Card className="p-4 sm:p-6 lg:p-8">
+            <div className="rounded-xl border border-border bg-foreground/[0.015] p-3.5 sm:p-5 lg:p-[26px]">
+              <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_92px] lg:gap-8">
+                <div className="min-w-0">
                   <div className="mb-5">
                     <p className="text-sm font-semibold">
                       {selectedYear ? `Contribution activity — ${selectedYear}` : "Contribution activity"}
@@ -215,7 +216,7 @@ export function GithubSection() {
                     )}
                   </div>
                 </div>
-                <nav aria-label="Contribution year filter" className="flex gap-2 overflow-x-auto border-t border-border pt-4 lg:flex-col lg:overflow-visible lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
+                <nav aria-label="Contribution year filter" className="-mx-1 flex min-w-0 gap-2 overflow-x-auto border-t border-border px-1 pt-4 lg:mx-0 lg:flex-col lg:overflow-visible lg:border-l lg:border-t-0 lg:px-0 lg:pl-5 lg:pt-0">
                   {years.map((year) => {
                     const isActive = selectedYear === year || (selectedYear === null && year === currentYear);
                     return (
@@ -223,7 +224,7 @@ export function GithubSection() {
                         key={year}
                         type="button"
                         onClick={() => setSelectedYear(selectedYear === year && year === currentYear ? null : year)}
-                        className={`min-w-[64px] rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${isActive ? "bg-accent text-accent-foreground shadow-glow" : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"}`}
+                        className={`min-w-[60px] flex-none rounded-lg px-3 py-2 text-center text-sm font-medium transition-colors lg:text-left ${isActive ? "bg-accent text-accent-foreground shadow-glow" : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"}`}
                         aria-pressed={isActive}
                         title={year === currentYear ? "Click again to return to the last 12 months" : `Show ${year} contributions`}
                       >
@@ -248,7 +249,7 @@ export function GithubSection() {
               )}
 
               {pinnedStatus === "error" && (
-                <p className="rounded-xl border border-dashed border-border-strong p-7 text-center text-[13.5px] text-muted-foreground">
+                <p className="rounded-xl border border-dashed border-border-strong p-5 text-center text-[13.5px] text-muted-foreground sm:p-7">
                   Pinned projects couldn&apos;t be loaded right now.{" "}
                   <a
                     href={siteConfig.links.github}
@@ -262,7 +263,7 @@ export function GithubSection() {
               )}
 
               {pinnedStatus === "ready" && pinned.length === 0 && (
-                <p className="rounded-xl border border-dashed border-border-strong p-7 text-center text-[13.5px] text-muted-foreground">
+                <p className="rounded-xl border border-dashed border-border-strong p-5 text-center text-[13.5px] text-muted-foreground sm:p-7">
                   No pinned repositories yet — pin your favorite projects on
                   your{" "}
                   <a
@@ -297,10 +298,10 @@ export function GithubSection() {
                         href={link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-xl border border-border bg-foreground/[0.015] px-5 py-[18px] transition-[transform,border-color] duration-200 ease-smooth hover:-translate-y-[3px] hover:border-accent/35"
+                        className="rounded-xl border border-border bg-foreground/[0.015] px-4 py-4 transition-[transform,border-color] duration-200 ease-smooth hover:-translate-y-[3px] hover:border-accent/35 sm:px-5 sm:py-[18px]"
                       >
                         <div className="flex items-start justify-between gap-2.5">
-                          <h3 className="font-mono text-[13.5px] font-semibold">
+                          <h3 className="min-w-0 break-words font-mono text-[13.5px] font-semibold">
                             {repo.repo}
                           </h3>
                           <ExternalLink
@@ -311,7 +312,7 @@ export function GithubSection() {
                         <p className="mt-2 min-h-[34px] text-[13px] leading-relaxed text-muted-foreground">
                           {repo.description ?? "No description provided."}
                         </p>
-                        <div className="mt-3.5 flex items-center gap-3.5 text-xs text-faint">
+                        <div className="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 text-xs text-faint">
                           {repo.language && (
                             <span className="flex items-center gap-1.5">
                               <span
