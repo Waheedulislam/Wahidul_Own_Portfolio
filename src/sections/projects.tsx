@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, FolderGit2 } from "lucide-react";
+import { ExternalLink, Github, FolderGit2, ChevronRight } from "lucide-react";
 import { projects, type Project } from "@/data/projects";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,124 +16,126 @@ const filters = [
   "All",
 ] as const;
 
-function CaseStudyField({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <p className="mb-1.5 font-mono text-[11.5px] font-medium uppercase tracking-[0.06em] text-accent">
-        {label}
-      </p>
-      <div className="text-sm text-muted-foreground">{children}</div>
-    </div>
-  );
-}
-
 function ProjectCard({ project }: { project: Project }) {
-  const [open, setOpen] = React.useState(false);
+  const router = useRouter();
   const imageSrc =
-    typeof project.image === "string" ? project.image : project.image?.src;
+    typeof project.image === "string" ? project.image : project.image;
+
+  const handleCardClick = () => {
+    router.push(`/projects/${project.slug}`);
+  };
 
   return (
-    <Card interactive className="overflow-hidden">
-      {imageSrc ? (
-        <div className="border-b border-border bg-foreground/[0.02] p-3">
-          <img
-            src={imageSrc}
-            alt={`${project.name} preview`}
-            className="h-[240px] w-full rounded-lg border border-border object-cover shadow-sm"
-          />
-        </div>
-      ) : null}
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      <Card className="group h-full overflow-hidden rounded-[1.25rem] border border-border/70 bg-card/95 shadow-[0_18px_60px_-40px_rgba(15,23,42,0.5)] transition-all duration-200 ease-smooth hover:-translate-y-1 hover:shadow-xl">
+        {imageSrc ? (
+          <div
+            className="relative w-full h-[220px] overflow-hidden rounded-t-[1.25rem]"
+            onClick={handleCardClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                handleCardClick();
+              }
+            }}
+          >
+            <img
+              src={typeof imageSrc === "string" ? imageSrc : imageSrc.src}
+              alt={`${project.name} preview`}
+              className="absolute inset-0 h-full w-full object-cover transition duration-300 ease-smooth group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-3 bg-gradient-to-b from-slate-950/80 to-transparent px-5 py-4 text-white">
+              <span className="rounded-full border border-white/10 bg-slate-950/65 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-slate-100">
+                {project.category}
+              </span>
+              <span className="rounded-full bg-accent px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-foreground">
+                {project.slug === "tech-heim" || project.slug === "wedding-pro"
+                  ? "Team"
+                  : "Featured"}
+              </span>
+            </div>
+          </div>
+        ) : null}
 
-      <div className="flex flex-wrap items-start justify-between gap-4 p-6">
-        <div>
-          <div className="flex flex-wrap gap-1.5">
-            {project.techStack.slice(0, 5).map((t) => (
+        <div className="p-5" onClick={handleCardClick}>
+          <div className="flex flex-wrap gap-2">
+            {project.techStack.slice(0, 4).map((t) => (
               <span
                 key={t}
-                className="rounded-sm border border-border-strong bg-foreground/[0.02] px-2.5 py-1 font-mono text-[11.5px] text-muted-foreground"
+                className="rounded-full border border-border bg-foreground/[0.12] px-3 py-1 text-[12px] font-medium text-muted-foreground"
               >
                 {t}
               </span>
             ))}
           </div>
-          <h3 className="mt-3.5 font-display text-xl font-semibold">
+
+          <h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-foreground">
             {project.name}
           </h3>
-          <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">
             {project.shortDescription}
           </p>
         </div>
-        <div className="flex gap-2">
-          {project.liveUrl && (
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm">
-                <ExternalLink size={14} />
-                Live Demo
-              </Button>
-            </a>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+
+        <div className="border-t border-border/70 px-6 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-2">
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <Button
+                    variant="accent"
+                    size="sm"
+                    className="rounded-full px-4 py-2 font-semibold"
+                  >
+                    <ExternalLink size={14} />
+                    Live Demo
+                  </Button>
+                </a>
+              )}
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full border-accent px-4 py-2 font-semibold text-accent"
+                  >
+                    <Github size={14} />
+                    Code
+                  </Button>
+                </a>
+              )}
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleCardClick}
+              className="inline-flex items-center justify-center gap-2 rounded-full border-accent px-4 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-accent transition duration-200 hover:bg-accent/10"
             >
-              <Button variant="outline" size="sm">
-                <Github size={14} />
-                Code
-              </Button>
-            </a>
-          )}
-        </div>
-      </div>
-
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full border-t border-border px-6 py-3.5 text-left text-sm font-semibold text-accent transition-colors duration-150 ease-smooth hover:bg-accent/[0.07]"
-        aria-expanded={open}
-      >
-        {open ? "Hide case study" : "View case study"}
-      </button>
-
-      {open && (
-        <div className="grid gap-6 border-t border-border bg-foreground/[0.015] p-6 sm:grid-cols-2">
-          <CaseStudyField label="Problem Statement">
-            {project.problem}
-          </CaseStudyField>
-          <CaseStudyField label="Solution">{project.solution}</CaseStudyField>
-          <CaseStudyField label="Key Features">
-            <ul className="list-inside list-disc space-y-1">
-              {project.keyFeatures.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
-          </CaseStudyField>
-          <CaseStudyField label="Tech Stack">
-            {project.techStack.join(", ")}
-          </CaseStudyField>
-          <div className="sm:col-span-2">
-            <CaseStudyField label="Architecture Overview">
-              <pre className="overflow-x-auto rounded-md border border-border bg-card-soft p-3.5 font-mono text-xs leading-relaxed">
-                {project.architecture}
-              </pre>
-            </CaseStudyField>
+              Details
+              <ChevronRight size={16} />
+            </Button>
           </div>
-          <CaseStudyField label="Challenges Faced">
-            {project.challenges}
-          </CaseStudyField>
-          <CaseStudyField label="Lessons Learned">
-            {project.lessonsLearned}
-          </CaseStudyField>
         </div>
-      )}
-    </Card>
+      </Card>
+    </motion.div>
   );
 }
 
@@ -161,13 +164,13 @@ export function Projects() {
           </p>
         </div>
 
-        <div className="mb-[30px] flex flex-wrap gap-2">
+        <div className="mb-[30px] flex flex-wrap gap-3">
           {filters.map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               aria-pressed={filter === f}
-              className={`rounded-full border px-4 py-[7px] text-[13.5px] font-medium transition-colors duration-150 ease-smooth ${
+              className={`rounded-full border px-5 py-2 text-sm font-medium transition-colors duration-150 ease-smooth ${
                 filter === f
                   ? "border-accent bg-accent text-accent-foreground"
                   : "border-border-strong bg-card text-muted-foreground hover:border-accent hover:text-foreground"
@@ -199,7 +202,7 @@ export function Projects() {
             </p>
           </motion.div>
         ) : (
-          <div className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {visible.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}
