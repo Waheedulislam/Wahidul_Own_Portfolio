@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import { siteConfig } from "@/data/site";
 import { Button } from "@/components/ui/button";
 
@@ -15,7 +15,10 @@ const socials = [
 function useRotatingRole(roles: readonly string[], intervalMs = 2200) {
   const [index, setIndex] = React.useState(0);
   React.useEffect(() => {
-    const id = setInterval(() => setIndex((i) => (i + 1) % roles.length), intervalMs);
+    const id = setInterval(
+      () => setIndex((i) => (i + 1) % roles.length),
+      intervalMs,
+    );
     return () => clearInterval(id);
   }, [roles, intervalMs]);
   return roles[index];
@@ -69,14 +72,32 @@ export function Hero() {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href={siteConfig.links.resume} target="_blank" rel="noopener noreferrer">
-              <Button variant="accent" size="lg">Download Resume</Button>
+            <a
+              href={siteConfig.links.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="accent" size="lg">
+                Download Resume
+              </Button>
             </a>
             <a href="#projects">
-              <Button variant="outline" size="lg">View Projects</Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full border border-accent/35 bg-gradient-to-br from-accent/10 via-background to-accent/5 px-5 text-[14px] font-medium text-foreground shadow-[0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent hover:bg-accent/10"
+              >
+                View Projects
+              </Button>
             </a>
             <a href="#contact">
-              <Button variant="ghost" size="lg">Hire Me</Button>
+              <Button
+                variant="ghost"
+                size="lg"
+                className="rounded-full px-5 text-[14px] font-medium"
+              >
+                Hire Me
+              </Button>
             </a>
           </div>
 
@@ -109,31 +130,61 @@ export function Hero() {
             <span className="h-[9px] w-[9px] rounded-full bg-foreground/15" />
             <span className="h-[9px] w-[9px] rounded-full bg-foreground/15" />
             <span className="h-[9px] w-[9px] rounded-full bg-foreground/15" />
-            <span className="ml-1.5 font-mono text-xs text-faint">profile.json</span>
+            <span className="ml-1.5 font-mono text-xs text-faint">
+              profile.json
+            </span>
           </div>
           <pre className="overflow-x-auto px-5 pb-[22px] pt-5 font-mono text-[13px] leading-[1.85] text-muted-foreground">
             <code>
               {"{\n"}
-              {"  "}<K>&quot;name&quot;</K>: <S>&quot;{siteConfig.name}&quot;</S>,{"\n"}
-              {"  "}<K>&quot;role&quot;</K>: [{"\n"}
+              {"  "}
+              <K>&quot;name&quot;</K>: <S>&quot;{siteConfig.name}&quot;</S>,
+              {"\n"}
+              {"  "}
+              <K>&quot;role&quot;</K>: [{"\n"}
               {siteConfig.roles.map((r, i) => (
                 <React.Fragment key={r}>
-                  {"    "}<S>&quot;{r}&quot;</S>
+                  {"    "}
+                  <S>&quot;{r}&quot;</S>
                   {i < siteConfig.roles.length - 1 ? "," : ""}
                   {"\n"}
                 </React.Fragment>
               ))}
               {"  "}],{"\n"}
-              {"  "}<K>&quot;stack&quot;</K>: [{"\n"}
-              {"    "}<S>&quot;React&quot;</S>, <S>&quot;Next.js&quot;</S>, <S>&quot;Node.js&quot;</S>,{"\n"}
-              {"    "}<S>&quot;Express&quot;</S>, <S>&quot;MongoDB&quot;</S>, <S>&quot;PostgreSQL&quot;</S>,{"\n"}
-              {"    "}<S>&quot;Prisma&quot;</S>{"\n"}
+              {"  "}
+              <K>&quot;stack&quot;</K>: [{"\n"}
+              {"    "}
+              <S>&quot;React&quot;</S>, <S>&quot;Next.js&quot;</S>,{" "}
+              <S>&quot;Node.js&quot;</S>,{"\n"}
+              {"    "}
+              <S>&quot;Express&quot;</S>, <S>&quot;MongoDB&quot;</S>,{" "}
+              <S>&quot;PostgreSQL&quot;</S>,{"\n"}
+              {"    "}
+              <S>&quot;Prisma&quot;</S>
+              {"\n"}
               {"  "}],{"\n"}
-              {"  "}<K>&quot;status&quot;</K>: <S>&quot;Open to Work&quot;</S>{"\n"}
+              {"  "}
+              <K>&quot;status&quot;</K>: <S>&quot;Open to Work&quot;</S>
+              {"\n"}
               {"}"}
             </code>
           </pre>
         </motion.div>
+      </div>
+
+      <div className="-mt-4 flex justify-center pb-8 sm:pb-10">
+        <a
+          href="#about"
+          aria-label="Scroll to about section"
+          className="group relative inline-flex items-center gap-2 rounded-full border border-accent/40 bg-gradient-to-br from-accent/25 via-background to-accent/15 px-4 py-2.5 text-[13px] font-medium tracking-[0.24em] text-accent uppercase shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_10px_28px_rgba(0,0,0,0.14)] backdrop-blur transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent hover:text-foreground hover:shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_12px_34px_rgba(0,0,0,0.2)]"
+        >
+          <span className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.2),transparent_70%)]" />
+          <span className="relative">Scroll</span>
+          <ArrowDown
+            size={16}
+            className="relative transition-all duration-300 ease-out group-hover:translate-y-1 group-hover:opacity-90"
+          />
+        </a>
       </div>
     </section>
   );
