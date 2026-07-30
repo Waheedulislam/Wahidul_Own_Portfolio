@@ -28,14 +28,14 @@ export default function ProjectDetailsPage({
     typeof project.image === "string" ? project.image : project.image;
 
   return (
-    <main className="section-y bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.08),transparent_26%)]">
+    <main className="section-y overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.08),transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.08),transparent_26%)]">
       <div className="container-px">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="space-y-3">
             <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
               Project case study
             </p>
-            <h1 className="text-4xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl">
+            <h1 className="text-3xl font-semibold tracking-[-0.04em] text-foreground sm:text-4xl lg:text-5xl">
               {project.name}
             </h1>
             <p className="max-w-[72ch] text-base leading-7 text-muted-foreground">
@@ -45,7 +45,7 @@ export default function ProjectDetailsPage({
 
           <Link
             href="/#projects"
-            className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-accent transition hover:text-accent-foreground"
+            className="inline-flex items-center gap-2 self-start text-sm font-semibold uppercase tracking-[0.18em] text-accent transition hover:text-accent-foreground"
           >
             <ArrowLeft size={16} />
             Back to projects
@@ -59,12 +59,12 @@ export default function ProjectDetailsPage({
               alt={`${project.name} preview`}
               width={1280}
               height={720}
-              className="h-[420px] w-full object-cover"
+              className="h-[240px] w-full object-cover sm:h-[320px] lg:h-[420px]"
             />
           </div>
         ) : null}
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1.8fr_1fr]">
+        <div className="mt-10 grid gap-8 xl:grid-cols-[1.8fr_1fr]">
           <section className="space-y-8">
             <div className="rounded-[1.25rem] border border-border bg-foreground/[0.7] p-6 shadow-sm">
               <div className="flex flex-wrap gap-3">
@@ -136,7 +136,7 @@ export default function ProjectDetailsPage({
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
                   Architecture
                 </p>
-                <pre className="mt-4 overflow-x-auto rounded-3xl border border-border bg-slate-950/5 p-5 font-mono text-xs leading-6 text-slate-500">
+                <pre className="mt-4 overflow-x-auto whitespace-pre-wrap break-words rounded-3xl border border-border bg-slate-950/5 p-5 font-mono text-xs leading-6 text-slate-500">
                   {project.architecture}
                 </pre>
               </div>
@@ -203,7 +203,7 @@ export default function ProjectDetailsPage({
               </div>
             </div>
 
-            <div className="rounded-[1.25rem] border border-border bg-foreground/[0.6] p-6 shadow-sm">
+            <div className="rounded-[1.25rem] border border-border bg-foreground/[0.6] p-5 shadow-sm sm:p-6">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">
                 Summary
               </p>

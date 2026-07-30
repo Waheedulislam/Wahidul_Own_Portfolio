@@ -31,7 +31,7 @@ function ProjectCard({ project }: { project: Project }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
     >
-      <Card className="group h-full overflow-hidden rounded-[1.25rem] border border-border/70 bg-card/95 shadow-[0_18px_60px_-40px_rgba(15,23,42,0.5)] transition-all duration-200 ease-smooth hover:-translate-y-1 hover:shadow-xl">
+      <Card className="group h-full cursor-pointer select-none touch-manipulation overflow-hidden rounded-[1.25rem] border border-border/70 bg-card/95 shadow-[0_18px_60px_-40px_rgba(15,23,42,0.5)] transition-all duration-200 ease-smooth hover:-translate-y-1 hover:shadow-xl">
         {imageSrc ? (
           <div
             className="relative w-full h-[220px] overflow-hidden rounded-t-[1.25rem]"
@@ -85,7 +85,7 @@ function ProjectCard({ project }: { project: Project }) {
 
         <div className="border-t border-border/70 px-6 py-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
               {project.liveUrl && (
                 <a
                   href={project.liveUrl}
@@ -96,7 +96,7 @@ function ProjectCard({ project }: { project: Project }) {
                   <Button
                     variant="accent"
                     size="sm"
-                    className="rounded-full px-4 py-2 font-semibold"
+                    className="w-full rounded-full px-4 py-2 font-semibold sm:w-auto"
                   >
                     <ExternalLink size={14} />
                     Live Demo
@@ -113,7 +113,7 @@ function ProjectCard({ project }: { project: Project }) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-full border-accent px-4 py-2 font-semibold text-accent"
+                    className="w-full rounded-full border-accent px-4 py-2 font-semibold text-accent sm:w-auto"
                   >
                     <Github size={14} />
                     Code
@@ -127,7 +127,7 @@ function ProjectCard({ project }: { project: Project }) {
               variant="outline"
               size="sm"
               onClick={handleCardClick}
-              className="inline-flex items-center justify-center gap-2 rounded-full border-accent px-4 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-accent transition duration-200 hover:bg-accent/10"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border-accent px-4 py-2 text-sm font-semibold uppercase tracking-[0.16em] text-accent transition duration-200 hover:bg-accent/10 sm:w-auto"
             >
               Details
               <ChevronRight size={16} />
