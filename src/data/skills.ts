@@ -94,10 +94,11 @@ export const skillCategories: SkillCategory[] = [
 ];
 
 export const learning: string[] = [
+  "Next.js",
+  "React.js",
+  "TypeScript",
   "Node.js",
   "Express.js",
-  "Next.js",
-  "TypeScript",
   "Prisma ORM",
   "PostgreSQL",
   "MongoDB",

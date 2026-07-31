@@ -2,13 +2,19 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/data/site";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { useActiveSection } from "@/hooks/use-active-section";
+import { cn } from "@/lib/utils";
+
+const sectionIds = navLinks.map((l) => l.href.slice(1));
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
+  const active = useActiveSection(sectionIds);
 
   return (
     <header className="sticky top-0 z-[80] border-b border-border bg-background/70 backdrop-blur-[14px] backdrop-saturate-150">
@@ -22,17 +28,41 @@ export function Navbar() {
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center gap-[26px]">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="text-sm font-medium text-muted-foreground transition-colors duration-150 ease-smooth hover:text-foreground"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+          <ul className="flex items-center gap-[22px]">
+            {navLinks.map((link) => {
+              const isActive = active === link.href.slice(1);
+              return (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      // Symmetric padding keeps the label vertically centred in
+                      // the bar while leaving room for the underline.
+                      "relative block py-1.5 text-sm font-medium transition-colors duration-150 ease-smooth",
+                      isActive
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {link.label}
+                    {/* Single shared underline — framer-motion slides it between
+                        items instead of cross-fading one per link. */}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-active-underline"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 32,
+                        }}
+                        className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-gradient-to-r from-teal to-accent shadow-[0_0_10px_-1px_hsl(var(--accent))]"
+                      />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -66,17 +96,35 @@ export function Navbar() {
           className="border-t border-border bg-background/95 backdrop-blur-[14px] lg:hidden"
         >
           <ul className="container-px flex flex-col py-2">
-            {navLinks.map((link) => (
-              <li key={link.href} className="border-b border-border last:border-none">
-                <a
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-3.5 text-sm font-medium text-foreground"
+            {navLinks.map((link) => {
+              const isActive = active === link.href.slice(1);
+              return (
+                <li
+                  key={link.href}
+                  className="border-b border-border last:border-none"
                 >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "flex items-center gap-2.5 py-3.5 text-sm font-medium transition-colors duration-150 ease-smooth",
+                      isActive ? "text-accent" : "text-foreground",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-[5px] w-[5px] flex-none rounded-full transition-all duration-200 ease-smooth",
+                        isActive
+                          ? "bg-accent shadow-[0_0_10px_hsl(var(--accent))]"
+                          : "bg-transparent",
+                      )}
+                    />
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       )}

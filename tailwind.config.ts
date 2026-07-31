@@ -87,6 +87,13 @@ const config: Config = {
           "0%": { backgroundPosition: "100% 0" },
           "100%": { backgroundPosition: "0 0" },
         },
+        /* Light travelling down the hero's scroll-cue rail */
+        "beam-down": {
+          "0%": { transform: "translateY(-120%)", opacity: "0" },
+          "18%": { opacity: "1" },
+          "82%": { opacity: "1" },
+          "100%": { transform: "translateY(260%)", opacity: "0" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out both",
@@ -97,6 +104,7 @@ const config: Config = {
         "drift-b": "drift-b 21s ease-in-out infinite",
         "ping-ring": "ping-ring 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) infinite",
         shimmer: "shimmer 1.4s ease infinite",
+        "beam-down": "beam-down 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite",
       },
     },
   },
